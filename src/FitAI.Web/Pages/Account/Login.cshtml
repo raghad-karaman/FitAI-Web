@@ -1,0 +1,79 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Account.LoginModel
+
+@section styles {
+    <abp-style src="/Pages/Account/Login.css" />
+}
+
+@section scripts {
+    <abp-script src="/Pages/Account/Login.js" />
+}
+
+<div class="account-container">
+    <div class="account-card">
+        <div class="account-header">
+            <div class="account-logo">
+                <i class="fas fa-robot text-primary"></i>
+                <span>FitAI</span>
+            </div>
+            <h2 class="account-title">Hoş Geldiniz</h2>
+            <p class="account-subtitle">Hesabınıza giriş yapın</p>
+        </div>
+
+        <form method="post" id="loginForm">
+                @Html.AntiForgeryToken()    
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="mb-3">
+                <label class="form-label">E-posta veya Kullanıcı Adı</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-envelope text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="loginEmail"
+                           placeholder="ornek@firmasi.com" asp-for="Input.EmailOrUsername" required>
+                </div>
+                <span class="invalid-feedback" id="errEmail"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Şifre</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    <input type="password" class="form-control border-start-0" id="loginPassword"
+                           placeholder="••••••••" asp-for="Input.Password" required>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="invalid-feedback" id="errPassword"></span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" asp-for="Input.RememberMe">
+                    <label class="form-check-label small" for="rememberMe">Beni Hatırla</label>
+                </div>
+                <a href="#" class="text-primary small" id="forgotPasswordLink">Şifremi Unuttum</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2" id="loginBtn">
+                <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+            </button>
+        </form>
+
+        <div class="account-footer">
+            <span class="text-muted">Hesabınız yok mu?</span>
+            <a href="/Account/Register" class="text-primary fw-semibold ms-1">Kayıt Olun</a>
+        </div>
+    </div>
+
+    <!-- Demo uyarısı (silinebilir) -->
+    <div class="demo-alert text-center mt-3">
+        <small class="text-muted">Demo: admin@fitai.com / 12345678 ile giriş yapabilirsiniz.</small>
+    </div>
+</div>

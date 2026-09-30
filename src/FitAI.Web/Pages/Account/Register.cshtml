@@ -1,0 +1,103 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Account.RegisterModel
+
+@section styles {
+    <abp-style src="/Pages/Account/Register.css" />
+}
+
+@section scripts {
+    <abp-script src="/Pages/Account/Register.js" />
+}
+
+<div class="account-container">
+    <div class="account-card">
+        <div class="account-header">
+            <div class="account-logo">
+                <i class="fas fa-robot text-primary"></i>
+                <span>FitAI</span>
+            </div>
+            <h2 class="account-title">Kayıt Olun</h2>
+            <p class="account-subtitle">Yeni bir hesap oluşturun</p>
+        </div>
+
+        <form method="post" id="registerForm">
+            @Html.AntiForgeryToken()
+
+            @* DÜZELTME 2: Sunucu hatalarını göster *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Ad Soyad</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-user text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="fullName"
+                           placeholder="Ad Soyad" asp-for="Input.FullName" required>
+                </div>
+                <span class="invalid-feedback" id="errFullName"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">E-posta Adresi</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-envelope text-muted"></i>
+                    </span>
+                    <input type="email" class="form-control border-start-0" id="regEmail"
+                           placeholder="ornek@firmasi.com" asp-for="Input.Email" required>
+                </div>
+                <span class="invalid-feedback" id="errEmail"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Şifre</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    <input type="password" class="form-control border-start-0" id="regPassword"
+                           placeholder="••••••••" asp-for="Input.Password" required>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="invalid-feedback" id="errPassword"></span>
+                <div class="form-text small">En az 8 karakter, 1 büyük harf ve 1 rakam içermelidir.</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Şifre Tekrar</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    @* DÜZELTME 3: asp-for eklendi *@
+                    <input type="password" class="form-control border-start-0" id="confirmPassword"
+                           placeholder="••••••••" asp-for="Input.ConfirmPassword" required>
+                </div>
+                <span class="invalid-feedback" id="errConfirm"></span>
+            </div>
+
+            <div class="mb-4 form-check">
+                <input class="form-check-input" type="checkbox" id="termsCheck" asp-for="Input.AcceptTerms">
+                <label class="form-check-label small" for="termsCheck">
+                    <a href="#" id="termsLink">Kullanım Koşulları</a>'nı okudum ve kabul ediyorum.
+                </label>
+                <span class="invalid-feedback d-block" id="errTerms"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2" id="registerBtn">
+                <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+            </button>
+        </form>
+
+        <div class="account-footer">
+            <span class="text-muted">Zaten bir hesabınız var mı?</span>
+            <a href="/Account/Login" class="text-primary fw-semibold ms-1">Giriş Yapın</a>
+        </div>
+    </div>
+</div>

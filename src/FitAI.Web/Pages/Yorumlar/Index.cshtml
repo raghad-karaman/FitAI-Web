@@ -1,0 +1,274 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Yorumlar.IndexModel
+
+<div class="fitai-page">
+
+    <!-- Sayfa Başlığı -->
+    <div class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="page-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div>
+                    <h2 class="page-title mb-1">Yorum Yönetimi</h2>
+                    <p class="text-muted mb-0 small">Tüm ürün yorumları ve NLP analiz sonuçları</p>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <span class="badge bg-primary-soft text-primary">
+                    <i class="fas fa-robot me-1"></i>AI Destekli Analiz
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Kartları -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="yorum-kpi-card" data-card="total">
+                <div class="yorum-kpi-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="yorum-kpi-info">
+                    <div class="yorum-kpi-value" id="toplamYorum">—</div>
+                    <div class="yorum-kpi-label">Toplam Yorum</div>
+                    <div class="yorum-kpi-trend">
+                        <i class="fas fa-chart-line"></i> +%12 bu ay
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="yorum-kpi-card" data-card="nlp">
+                <div class="yorum-kpi-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="yorum-kpi-info">
+                    <div class="yorum-kpi-value" id="nlpIslendi">—</div>
+                    <div class="yorum-kpi-label">NLP Analiz Edildi</div>
+                    <div class="yorum-kpi-trend trend-up">
+                        <i class="fas fa-check-circle"></i> Tamamlandı
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="yorum-kpi-card" data-card="pending">
+                <div class="yorum-kpi-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="yorum-kpi-info">
+                    <div class="yorum-kpi-value" id="nlpBekliyor">—</div>
+                    <div class="yorum-kpi-label">NLP Bekliyor</div>
+                    <div class="yorum-kpi-trend trend-warning">
+                        <i class="fas fa-hourglass-half"></i> İşlem sırasında
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="yorum-kpi-card" data-card="rating">
+                <div class="yorum-kpi-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="yorum-kpi-info">
+                    <div class="yorum-kpi-value" id="ortPuan">—</div>
+                    <div class="yorum-kpi-label">Ortalama Puan</div>
+                    <div class="yorum-kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +0.2 geçen aya göre
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sekmeler (Modern) -->
+    <ul class="nav analiz-nav-tabs mb-4" id="yorumTabs">
+        <li class="nav-item">
+            <button class="analiz-nav-btn active" data-tab="yorumlar">
+                <i class="fas fa-comment me-1"></i>Yorumlar
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="analiz-nav-btn" data-tab="nlp">
+                <i class="fas fa-brain me-1"></i>NLP Bulgular
+            </button>
+        </li>
+    </ul>
+
+    <!-- SEKME 1: Yorumlar -->
+    <div id="tab-yorumlar" class="analiz-tab-icerik">
+
+        <!-- Filtre Kartı -->
+        <div class="filter-card mb-4">
+            <div class="filter-card-body">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="yorumArama" class="form-control search-input"
+                                   placeholder="Yorum metni ara...">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="magazaFiltre" class="form-select filter-select">
+                            <option value="">Tüm Mağazalar</option>
+                            <option value="1">SportZone TR</option>
+                            <option value="2">FashionHub</option>
+                            <option value="3">ActiveWear</option>
+                            <option value="4">FitStyle</option>
+                            <option value="5">RunnerShop</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="puanFiltre" class="form-select filter-select">
+                            <option value="">Tüm Puanlar</option>
+                            <option value="5">★★★★★ (5)</option>
+                            <option value="4">★★★★ (4)</option>
+                            <option value="3">★★★ (3)</option>
+                            <option value="2">★★ (2)</option>
+                            <option value="1">★ (1)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="nlpFiltre" class="form-select filter-select">
+                            <option value="">NLP Durumu</option>
+                            <option value="islendi">Analiz Edildi</option>
+                            <option value="bekliyor">Bekliyor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex gap-2">
+                        <select id="yorumSirala" class="form-select filter-select">
+                            <option value="yeni">En Yeni</option>
+                            <option value="puan_yuksek">En Yüksek Puan</option>
+                            <option value="puan_dusuk">En Düşük Puan</option>
+                        </select>
+                        <button class="btn btn-outline-secondary filter-clear-btn" id="filtreTemizle">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yorum Tablosu -->
+        <div class="table-card">
+            <div class="table-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-list-ul text-primary"></i>
+                    <span class="fw-semibold">Yorum Listesi</span>
+                </div>
+                <span class="table-badge" id="yorumKayitYazi">—</span>
+            </div>
+            <div class="table-responsive">
+                <table class="yorum-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ürün</th>
+                            <th>Mağaza</th>
+                            <th>Yorum</th>
+                            <th>Puan</th>
+                            <th>NLP</th>
+                            <th class="text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="yorumTablosu">
+                        <tr class="loading-row">
+                            <td colspan="7">
+                                <div class="d-flex justify-content-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Yükleniyor...</span>
+                                    </div>
+                                    <span class="ms-2 text-muted">Yorumlar yükleniyor...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEKME 2: NLP Bulgular -->
+    <div id="tab-nlp" class="analiz-tab-icerik" style="display:none">
+
+        <!-- NLP Filtre Kartı -->
+        <div class="filter-card mb-4">
+            <div class="filter-card-body">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                        <select id="nlpMagazaFiltre" class="form-select filter-select">
+                            <option value="">Tüm Mağazalar</option>
+                            <option value="1">SportZone TR</option>
+                            <option value="2">FashionHub</option>
+                            <option value="3">ActiveWear</option>
+                            <option value="4">FitStyle</option>
+                            <option value="5">RunnerShop</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="nlpDuyguFiltre" class="form-select filter-select">
+                            <option value="">Tüm Duygular</option>
+                            <option value="Pozitif">Pozitif</option>
+                            <option value="Negatif">Negatif</option>
+                            <option value="Notr">Nötr</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="nlpDurumFiltre" class="form-select filter-select">
+                            <option value="">Tüm Durumlar</option>
+                            <option value="Acik">Açık</option>
+                            <option value="Kapali">Kapalı</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-secondary filter-clear-btn" id="nlpFiltreTemizle">
+                            <i class="fas fa-times me-1"></i>Temizle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NLP Bulgu Kartları Grid -->
+        <div class="row g-4" id="nlpBulgularGrid">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Yükleniyor...</span>
+                </div>
+                <div class="text-muted mt-2">NLP bulguları yükleniyor...</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts {
+    <abp-script src="/Pages/Yorumlar/Index.js" />
+}
+
+<!-- Yorum Detay Modal -->
+<div class="modal fade" id="yorumDetayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-comment me-2 text-primary"></i>Yorum Detayı
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="yorumDetayIcerik">
+                <!-- Dinamik içerik -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>

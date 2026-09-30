@@ -1,0 +1,168 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Kullanicilar.IndexModel
+
+@section styles {
+    <abp-style src="/Pages/Kullanicilar/Index.css" />
+}
+
+@section scripts {
+    <abp-script src="/Pages/Kullanicilar/Index.js" />
+}
+
+<div class="fitai-page">
+    <div class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h2 class="page-title mb-1">
+                    <i class="fas fa-users me-2 text-primary"></i>Kullanıcı Yönetimi
+                </h2>
+                <p class="text-muted mb-0 small">Sisteme kayıtlı tüm kullanıcılar</p>
+            </div>
+            <div>
+                <button class="btn btn-primary btn-sm" id="yeniKullaniciBtn">
+                    <i class="fas fa-user-plus me-1"></i>Yeni Kullanıcı
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Filtreler --}}
+    <div class="card mb-3">
+        <div class="card-body py-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="aramaInput" class="form-control border-start-0"
+                               placeholder="İsim veya e-posta ara..." />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select id="rolFiltre" class="form-select">
+                        <option value="">Tüm Roller</option>
+                        <option value="Admin">Admin</option>
+                        <option value="MagazaSahibi">Mağaza Sahibi</option>
+                        <option value="Kullanici">Kullanıcı</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="durumFiltre" class="form-select">
+                        <option value="">Tüm Durumlar</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="pasif">Pasif</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-end">
+                    <button class="btn btn-outline-secondary btn-sm" id="filtreTemizle">
+                        <i class="fas fa-times me-1"></i>Temizle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Tablo --}}
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover kullanici-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kullanıcı</th>
+                            <th>E-posta</th>
+                            <th>Rol</th>
+                            <th>Mağaza</th>
+                            <th>Son Giriş</th>
+                            <th>Durum</th>
+                            <th class="text-center">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kullaniciTablosu">
+                        <tr>
+                            <td colspan="8" class="text-center py-4 text-muted">
+                                <i class="fas fa-spinner fa-spin me-2"></i>Yükleniyor...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex align-items-center justify-content-between py-2">
+            <span class="text-muted small" id="toplamKayitYazi">—</span>
+            <div id="sayfalamaKonteyner" class="d-flex gap-1"></div>
+        </div>
+    </div>
+</div>
+
+{{!-- Detay Modal --}}
+<div class="modal fade" id="kullaniciDetayModal" tabindex="-1" role="dialog" aria-labelledby="detayModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detayModalLabel">
+                    <i class="fas fa-user-circle me-2 text-primary"></i>Kullanıcı Detayı
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" id="kullaniciDetayIcerik"></div>
+        </div>
+    </div>
+</div>
+
+{{!-- Ekle / Düzenle Modal --}}
+<div class="modal fade" id="kullaniciFormModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="formModalLabel">
+                    <i class="fas fa-user-plus me-2 text-primary"></i>Yeni Kullanıcı
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="formKullaniciId" />
+                <div class="mb-3">
+                    <label class="form-label">Ad Soyad <span class="text-danger">*</span></label>
+                    <input type="text" id="formAd" class="form-control" placeholder="Ad Soyad" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">E-posta <span class="text-danger">*</span></label>
+                    <input type="email" id="formEposta" class="form-control" placeholder="ornek@eposta.com" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Şifre <span class="text-danger" id="sifreZorunluIsareti">*</span></label>
+                    <input type="password" id="formSifre" class="form-control" placeholder="Şifre (güncelleme için boş bırakın)" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Rol <span class="text-danger">*</span></label>
+                    <select id="formRol" class="form-select">
+                        <option value="">Seçiniz...</option>
+                        <option value="Admin">Admin</option>
+                        <option value="MagazaSahibi">Mağaza Sahibi</option>
+                        <option value="Kullanici">Kullanıcı</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mağaza ID</label>
+                    <input type="number" id="formMagazaId" class="form-control" placeholder="0" min="0" />
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="formAktifMi" checked />
+                    <label class="form-check-label" for="formAktifMi">Aktif</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="formKaydetBtn">
+                    <i class="fas fa-save me-1"></i>Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

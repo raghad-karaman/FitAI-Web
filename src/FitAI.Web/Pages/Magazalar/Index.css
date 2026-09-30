@@ -1,0 +1,587 @@
+/* =============================================
+   FitAI - Mağaza Yönetimi - Modern Tasarım
+   ============================================= */
+
+:root {
+    --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-info: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    --card-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.12);
+    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fitai-page {
+    padding: 1rem 0.5rem;
+}
+
+/* =============================================
+   Sayfa Başlığı
+   ============================================= */
+.page-header {
+    background: linear-gradient(135deg, #fff, rgba(79, 70, 229, 0.02));
+    border-radius: 28px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.page-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--gradient-primary);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+}
+
+.page-icon i {
+    font-size: 1.6rem;
+    color: white;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+[data-bs-theme="dark"] .page-title {
+    background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* =============================================
+   KPI Kartları - Modern
+   ============================================= */
+.magaza-kpi-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 1.25rem 1.35rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-default);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.magaza-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.magaza-kpi-card[data-card="total"]::before { background: var(--gradient-primary); }
+.magaza-kpi-card[data-card="active"]::before { background: var(--gradient-success); }
+.magaza-kpi-card[data-card="premium"]::before { background: var(--gradient-warning); }
+.magaza-kpi-card[data-card="commission"]::before { background: var(--gradient-info); }
+
+.magaza-kpi-card:hover::before {
+    transform: scaleX(1);
+}
+
+.magaza-kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.magaza-kpi-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    transition: var(--transition-default);
+}
+
+.magaza-kpi-card:hover .magaza-kpi-icon {
+    transform: scale(1.05);
+}
+
+.magaza-kpi-card[data-card="total"] .magaza-kpi-icon { background: rgba(79, 70, 229, 0.1); color: #4f46e5; }
+.magaza-kpi-card[data-card="active"] .magaza-kpi-icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.magaza-kpi-card[data-card="premium"] .magaza-kpi-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.magaza-kpi-card[data-card="commission"] .magaza-kpi-icon { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+
+.magaza-kpi-info {
+    flex: 1;
+}
+
+.magaza-kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.magaza-kpi-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+.magaza-kpi-trend {
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.06);
+    color: #64748b;
+}
+
+.trend-up { color: #10b981; }
+.trend-down { color: #ef4444; }
+
+/* =============================================
+   Filtre Kartı
+   ============================================= */
+.filter-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.filter-card-body {
+    padding: 1rem 1.25rem;
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.search-input {
+    padding-left: 38px;
+    border-radius: 40px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    background: #fff;
+    transition: var(--transition-default);
+}
+
+.search-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.filter-select {
+    border-radius: 40px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    background-color: #fff;
+    padding: 0.45rem 2rem 0.45rem 1rem;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* =============================================
+   Tablo Kartı
+   ============================================= */
+.table-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: var(--transition-default);
+}
+
+.table-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.table-badge {
+    background: rgba(79, 70, 229, 0.08);
+    color: #4f46e5;
+    padding: 0.25rem 0.75rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Tablo Stilleri */
+.magaza-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.magaza-table thead th {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    padding: 1rem 1rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.magaza-table tbody td {
+    font-size: 0.85rem;
+    padding: 1rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    transition: background 0.2s ease;
+}
+
+.magaza-table tbody tr {
+    transition: var(--transition-default);
+}
+
+.magaza-table tbody tr:hover td {
+    background: rgba(79, 70, 229, 0.02);
+}
+
+/* Mağaza Bilgi Alanı */
+.magaza-bilgi {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.magaza-ikon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.magaza-ad {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 0.85rem;
+}
+
+/* Paket Badge'leri */
+.paket-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.paket-premium {
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+}
+
+.paket-standart {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+}
+
+.paket-baslangic {
+    background: rgba(100, 116, 139, 0.1);
+    color: #475569;
+}
+
+/* Durum Badge'leri */
+.durum-aktif {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.durum-pasif {
+    background: rgba(156, 163, 175, 0.12);
+    color: #6b7280;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* İşlem Butonları */
+.btn-islem {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    border: none;
+    transition: var(--transition-default);
+    cursor: pointer;
+}
+
+.btn-duzenle {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+}
+
+.btn-duzenle:hover {
+    background: #4f46e5;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.btn-sil {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.btn-sil:hover {
+    background: #ef4444;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   Modal Tasarımı
+   ============================================= */
+.modal-content {
+    border-radius: 32px;
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #f8fafc, #fff);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    background: #f8fafc;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 1.5rem;
+}
+
+.form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.3px;
+}
+
+.input-group-text {
+    border-radius: 16px 0 0 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.form-control, .form-select {
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    transition: var(--transition-default);
+    font-size: 0.85rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-check-input:checked {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+}
+
+/* Paket Bilgi Kartı */
+.package-info {
+    background: rgba(79, 70, 229, 0.05);
+    border: 1px solid rgba(79, 70, 229, 0.15);
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: #4f46e5;
+}
+
+.package-info i {
+    margin-right: 0.5rem;
+}
+
+/* Silme Modal */
+.warning-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.warning-icon i {
+    font-size: 2rem;
+    color: #ef4444;
+}
+
+/* =============================================
+   Dark Mode
+   ============================================= */
+[data-bs-theme="dark"] .page-header {
+    background: linear-gradient(135deg, #1e293b, rgba(79, 70, 229, 0.05));
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .magaza-kpi-card,
+[data-bs-theme="dark"] .filter-card,
+[data-bs-theme="dark"] .table-card,
+[data-bs-theme="dark"] .modal-content {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .magaza-kpi-value {
+    color: #f1f5f9;
+}
+
+[data-bs-theme="dark"] .magaza-ad,
+[data-bs-theme="dark"] .magaza-table tbody td {
+    color: #cbd5e1;
+}
+
+[data-bs-theme="dark"] .magaza-table thead th {
+    background: #0f172a;
+    color: #94a3b8;
+    border-bottom-color: #334155;
+}
+
+[data-bs-theme="dark"] .magaza-table tbody td {
+    border-bottom-color: #334155;
+}
+
+[data-bs-theme="dark"] .search-input,
+[data-bs-theme="dark"] .filter-select,
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .search-icon {
+    color: #64748b;
+}
+
+[data-bs-theme="dark"] .modal-header,
+[data-bs-theme="dark"] .modal-footer {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-bs-theme="dark"] .input-group-text {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+[data-bs-theme="dark"] .package-info {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
+/* =============================================
+   Animasyonlar ve Responsive
+   ============================================= */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.magaza-table tbody tr {
+    animation: fadeSlideUp 0.2s ease forwards;
+}
+
+.loading-row td {
+    background: transparent !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fitai-page { padding: 0.5rem; }
+    .page-header { padding: 1rem; flex-direction: column; text-align: center; }
+    .page-icon { margin: 0 auto; }
+    .magaza-kpi-value { font-size: 1.5rem; }
+    .magaza-kpi-icon { width: 44px; height: 44px; font-size: 1.1rem; }
+    .magaza-table thead th { font-size: 0.55rem; padding: 0.5rem; }
+    .magaza-table tbody td { font-size: 0.7rem; padding: 0.5rem; }
+    .btn-islem { width: 28px; height: 28px; font-size: 0.65rem; }
+    .modal-body { padding: 1rem; }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .magaza-kpi-value { font-size: 1.6rem; }
+}

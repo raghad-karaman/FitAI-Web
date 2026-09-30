@@ -1,0 +1,96 @@
+@page
+@using FitAI.Komisyonlar
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model FitAI.Web.Pages.Komisyonlar.IndexModel
+
+@section styles {
+    <abp-style src="/Pages/Komisyonlar/Index.css" />
+}
+
+@section scripts {
+    <abp-script src="/Pages/Komisyonlar/Index.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>Komisyon Kayıtları</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                <abp-button id="NewKomisyonButton"
+                            text="Yeni Komisyon Ekle"
+                            icon="plus"
+                            button-type="Primary" />
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+
+    <abp-card-body>
+        <!-- Filtre Alanı -->
+        <abp-row class="mb-3">
+            <abp-column size-md="_3">
+                <select id="DonemYilFilter" class="form-select">
+                    <option value="">Tüm Yıllar</option>
+                    @for (int y = DateTime.Now.Year; y >= 2020; y--)
+                    {
+                        <option value="@y">@y</option>
+                    }
+                </select>
+            </abp-column>
+            <abp-column size-md="_3">
+                <select id="DonemAyFilter" class="form-select">
+                    <option value="">Tüm Aylar</option>
+                    @for (int m = 1; m <= 12; m++)
+                    {
+                        <option value="@m">@m</option>
+                    }
+                </select>
+            </abp-column>
+            <abp-column size-md="_3">
+                <abp-button id="FilterButton" text="Filtrele" icon="filter" button-type="Secondary" />
+            </abp-column>
+        </abp-row>
+
+        <abp-table striped-rows="true" id="KomisyonTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>İşlemler</th>
+                    <th>Mağaza ID</th>
+                    <th>Ürün ID</th>
+                    <th>Sipariş Kodu</th>
+                    <th>Satış Tutarı</th>
+                    <th>Komisyon Tutarı</th>
+                    <th>Komisyon Oranı</th>
+                    <th>AI Attribution</th>
+                    <th>İşlem Tarihi</th>
+                    <th>Dönem</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+
+<!-- Create/Edit Modal -->
+<abp-modal size="Large" id="KomisyonModal">
+    <abp-modal-header title="Komisyon Kaydı"></abp-modal-header>
+    <abp-modal-body>
+        <abp-input asp-for="CreateUpdateKomisyon.MagazaId" label="Mağaza ID" />
+        <abp-input asp-for="CreateUpdateKomisyon.UrunId" label="Ürün ID" />
+        <abp-input asp-for="CreateUpdateKomisyon.WidgetSorguId" label="Widget Sorgu ID" />
+        <abp-input asp-for="CreateUpdateKomisyon.PlatformSiparisKodu" label="Platform Sipariş Kodu" />
+        <abp-input asp-for="CreateUpdateKomisyon.SatisTutari" label="Satış Tutarı" />
+        <abp-input asp-for="CreateUpdateKomisyon.KomisyonTutari" label="Komisyon Tutarı" />
+        <abp-input asp-for="CreateUpdateKomisyon.KomisyonOrani" label="Komisyon Oranı (%)" />
+        <abp-input asp-for="CreateUpdateKomisyon.IslemTarihi" label="İşlem Tarihi" type="date" />
+        <abp-input asp-for="CreateUpdateKomisyon.DonemYil" label="Dönem Yıl" />
+        <abp-input asp-for="CreateUpdateKomisyon.DonemAy" label="Dönem Ay" />
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" asp-for="CreateUpdateKomisyon.AIAttributionMi" />
+            <label class="form-check-label">AI Attribution mi?</label>
+        </div>
+        <abp-input asp-for="CreateUpdateKomisyon.AttributionTarihi" label="Attribution Tarihi" type="date" />
+    </abp-modal-body>
+    <abp-modal-footer buttons="@(AbpModalButtons.Save | AbpModalButtons.Cancel)"></abp-modal-footer>
+</abp-modal>

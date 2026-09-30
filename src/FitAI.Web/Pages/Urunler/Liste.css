@@ -1,0 +1,589 @@
+/* =============================================
+   FitAI - Ürün Kataloğu - Modern Tasarım
+   ============================================= */
+
+:root {
+    --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --card-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.12);
+    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fitai-page {
+    padding: 1rem 0.5rem;
+}
+
+.fw-700 { font-weight: 700; }
+
+/* =============================================
+   Sayfa Başlığı
+   ============================================= */
+.page-header {
+    background: linear-gradient(135deg, #fff, rgba(79, 70, 229, 0.02));
+    border-radius: 28px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.page-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--gradient-primary);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+}
+
+.page-icon i {
+    font-size: 1.6rem;
+    color: white;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* =============================================
+   Filtre Paneli
+   ============================================= */
+.filter-panel {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    position: sticky;
+    top: 1rem;
+    overflow: hidden;
+}
+
+.filter-panel-header {
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #f8fafc, #fff);
+    border-bottom: 1px solid #f1f5f9;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1e293b;
+}
+
+.filter-panel-header i {
+    margin-right: 0.5rem;
+    color: #4f46e5;
+}
+
+.filter-panel-body {
+    padding: 1.25rem;
+}
+
+.filter-group {
+    margin-bottom: 1.25rem;
+}
+
+.filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    display: block;
+    margin-bottom: 0.6rem;
+}
+
+/* Arama */
+.search-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.search-input {
+    padding-left: 34px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    background: #fff;
+    transition: var(--transition-default);
+}
+
+.search-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.filter-select {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+}
+
+.filter-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #334155;
+    padding: 0.25rem 0;
+}
+
+.checkbox-item input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #4f46e5;
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #334155;
+    padding: 0.25rem 0;
+}
+
+.radio-item input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #4f46e5;
+}
+
+.filter-clear-btn {
+    border-radius: 12px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    transition: var(--transition-default);
+}
+
+.filter-clear-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: white;
+}
+
+/* =============================================
+   Sıralama Çubuğu
+   ============================================= */
+.sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.result-count {
+    font-size: 0.75rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 40px;
+}
+
+.sort-select {
+    width: auto;
+    border-radius: 40px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    padding: 0.3rem 1rem;
+    background-color: #fff;
+}
+
+/* =============================================
+   Ürün Kartları
+   ============================================= */
+.urun-kart {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: var(--transition-default);
+    cursor: pointer;
+    height: 100%;
+    position: relative;
+}
+
+.urun-kart:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
+.urun-kart-header {
+    padding: 1.25rem 1.25rem 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.urun-kart-ikon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: var(--transition-default);
+}
+
+.urun-kart:hover .urun-kart-ikon {
+    transform: scale(1.05);
+}
+
+.urun-kart-ad {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.3;
+    margin-bottom: 0.2rem;
+}
+
+.urun-kart-magaza {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.urun-kart-body {
+    padding: 0 1.25rem 1rem;
+}
+
+.urun-kart-aciklama {
+    font-size: 0.75rem;
+    color: #64748b;
+    line-height: 1.45;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 36px;
+}
+
+.urun-kart-badgeler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+}
+
+.urun-kart-footer {
+    padding: 0.75rem 1.25rem;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.puan-yildiz {
+    color: #f59e0b;
+    font-size: 0.7rem;
+}
+
+.yorum-sayisi {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+/* Silindi overlay */
+.urun-kart.silindi {
+    opacity: 0.6;
+}
+
+.urun-kart.silindi::after {
+    content: 'SİLİNDİ';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+}
+
+/* Badge'ler */
+.kesim-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 40px;
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    display: inline-block;
+}
+
+.kumas-esnek-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 40px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    display: inline-block;
+}
+
+.nlp-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 40px;
+    display: inline-block;
+}
+
+.nlp-islendi {
+    background: rgba(14, 165, 233, 0.1);
+    color: #0284c7;
+}
+
+.nlp-bekliyor {
+    background: rgba(245, 158, 11, 0.1);
+    color: #b45309;
+}
+
+/* =============================================
+   Liste Görünümü Tablosu
+   ============================================= */
+.table-wrapper {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.urun-liste-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.urun-liste-table thead th {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.urun-liste-table tbody td {
+    font-size: 0.85rem;
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.urun-liste-table tbody tr {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.urun-liste-table tbody tr:hover td {
+    background: rgba(79, 70, 229, 0.02);
+}
+
+.urun-liste-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =============================================
+   Detay Modal
+   ============================================= */
+.product-detail-card {
+    background: linear-gradient(135deg, #f8fafc, #fff);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+.product-detail-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+}
+
+.product-detail-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.6;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+}
+
+.detail-stat-card {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 0.85rem 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.detail-stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.detail-stat-label {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Yorum Listesi */
+.yorum-listesi {
+    max-height: 420px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.yorum-kart {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    transition: var(--transition-default);
+}
+
+.yorum-kart:hover {
+    border-color: rgba(79, 70, 229, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.yorum-puan {
+    color: #f59e0b;
+    font-size: 0.7rem;
+}
+
+.yorum-metin {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0.4rem 0 0;
+}
+
+.yorum-nlp-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 40px;
+}
+
+/* =============================================
+   Dark Mode
+   ============================================= */
+[data-bs-theme="dark"] .page-header {
+    background: linear-gradient(135deg, #1e293b, rgba(79, 70, 229, 0.05));
+}
+
+[data-bs-theme="dark"] .filter-panel,
+[data-bs-theme="dark"] .table-wrapper,
+[data-bs-theme="dark"] .urun-kart,
+[data-bs-theme="dark"] .detail-stat-card,
+[data-bs-theme="dark"] .yorum-kart,
+[data-bs-theme="dark"] .product-detail-card {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .filter-panel-header {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-bs-theme="dark"] .urun-kart-ad,
+[data-bs-theme="dark"] .yorum-metin,
+[data-bs-theme="dark"] .urun-liste-table tbody td {
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .urun-liste-table thead th {
+    background: #0f172a;
+    color: #94a3b8;
+    border-color: #334155;
+}
+
+[data-bs-theme="dark"] .search-input,
+[data-bs-theme="dark"] .filter-select,
+[data-bs-theme="dark"] .sort-select {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .urun-kart-footer {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 768px) {
+    .filter-panel {
+        position: relative;
+        top: 0;
+        margin-bottom: 1rem;
+    }
+    .urun-kart-ikon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    .urun-kart-ad {
+        font-size: 0.8rem;
+    }
+}

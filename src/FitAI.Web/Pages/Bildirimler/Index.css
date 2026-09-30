@@ -1,0 +1,72 @@
+/* ===== Bildirimler Sayfası ===== */
+
+.bildirim-item {
+    transition: background-color 0.15s ease, border-left-color 0.15s ease;
+    border-left: 4px solid transparent;
+    padding: 0.875rem 1.25rem;
+}
+
+/* Okunmamış → solda mavi çizgi + açık mavi arkaplan */
+.bildirim-item.okunmamis {
+    background-color: #f0f7ff;
+    border-left-color: #0d6efd;
+}
+
+/* Okunmuş → solda gri çizgi */
+.bildirim-item.okunmus {
+    background-color: #fff;
+    border-left-color: #dee2e6;
+    color: #6c757d;
+}
+
+.bildirim-item.okunmus .fw-semibold {
+    font-weight: 400 !important;
+}
+
+.bildirim-item:hover {
+    background-color: #e9f0fb;
+}
+
+.bildirim-item.okunmus:hover {
+    background-color: #f8f9fa;
+}
+
+/* İkon kutusu */
+.bildirim-ikon {
+    width: 2rem;
+    text-align: center;
+    padding-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Aksiyon butonları — sadece hover'da belirginleşir */
+.bildirim-item .btnOku,
+.bildirim-item .btnSil {
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.bildirim-item:hover .btnOku,
+.bildirim-item:hover .btnSil {
+    opacity: 1;
+}
+
+.bildirim-item .btnOku:disabled {
+    opacity: 0 !important;
+}
+
+/* Okunmamış rozeti animasyonu */
+#okunmamisSayi {
+    font-size: 0.7rem;
+    animation: pulseRozet 1.8s infinite;
+}
+
+@keyframes pulseRozet {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.2); }
+}
+
+/* Boş durum ikonu */
+#bosListeMesaji i {
+    opacity: 0.25;
+}

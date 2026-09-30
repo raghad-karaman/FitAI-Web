@@ -1,0 +1,14 @@
+/* Register sayfası için Login.css'teki stiller + ekstra */
+.account-container {
+    /* aynı login.css'deki gibi */
+}
+
+/* Aynı stiller, ek olarak: */
+.form-text {
+    font-size: 0.7rem;
+    color: #6b7280;
+}
+
+#termsLink {
+    text-decoration: none;
+}

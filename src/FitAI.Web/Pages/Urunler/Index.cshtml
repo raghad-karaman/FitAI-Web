@@ -1,0 +1,292 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Urunler.IndexModel
+@Html.AntiForgeryToken()
+
+<div class="fitai-page">
+
+    <!-- Sayfa Başlığı -->
+    <div class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="page-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <div>
+                    <h2 class="page-title mb-1">Ürün Yönetimi</h2>
+                    <p class="text-muted mb-0 small">Platforma kayıtlı tüm ürünleri yönetin</p>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="yeniUrunBtn">
+                <i class="fas fa-plus me-2"></i>Yeni Ürün Ekle
+            </button>
+        </div>
+    </div>
+
+    <!-- KPI Kartları -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="urun-kpi-card" data-card="total">
+                <div class="urun-kpi-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <div class="urun-kpi-info">
+                    <div class="urun-kpi-value" id="toplamUrun">—</div>
+                    <div class="urun-kpi-label">Toplam Ürün</div>
+                    <div class="urun-kpi-trend">
+                        <i class="fas fa-database"></i> 5 kategoride
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="urun-kpi-card" data-card="active">
+                <div class="urun-kpi-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="urun-kpi-info">
+                    <div class="urun-kpi-value" id="aktifUrun">—</div>
+                    <div class="urun-kpi-label">Aktif Ürün</div>
+                    <div class="urun-kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> Yayında
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="urun-kpi-card" data-card="elastic">
+                <div class="urun-kpi-icon">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+                <div class="urun-kpi-info">
+                    <div class="urun-kpi-value" id="eskekUrun">—</div>
+                    <div class="urun-kpi-label">Esnek Kumaş</div>
+                    <div class="urun-kpi-trend trend-up">
+                        <i class="fas fa-chart-line"></i> +%15 talep
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="urun-kpi-card" data-card="cut">
+                <div class="urun-kpi-icon">
+                    <i class="fas fa-cut"></i>
+                </div>
+                <div class="urun-kpi-info">
+                    <div class="urun-kpi-value" id="kesimSayisi">—</div>
+                    <div class="urun-kpi-label">Farklı Kesim</div>
+                    <div class="urun-kpi-trend">
+                        <i class="fas fa-tag"></i> Çeşitlilik
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtre Kartı -->
+    <div class="filter-card mb-4">
+        <div class="filter-card-body">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <div class="search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="aramaInput" class="form-control search-input"
+                               placeholder="Ürün adı ara...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select id="kesimFiltre" class="form-select filter-select">
+                        <option value="">Tüm Kesimler</option>
+                        <option value="Regular">Regular Fit</option>
+                        <option value="Slim">Slim Fit</option>
+                        <option value="Oversize">Oversize</option>
+                        <option value="Athletic">Athletic Fit</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="kumasFiltre" class="form-select filter-select">
+                        <option value="">Kumaş Tipi</option>
+                        <option value="esnek">Esnek</option>
+                        <option value="esnek_degil">Standart</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="durumFiltre" class="form-select filter-select">
+                        <option value="">Tüm Durumlar</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="silindi">Silinmiş</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100 filter-clear-btn" id="filtreTemizle">
+                        <i class="fas fa-times me-1"></i>Temizle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ürün Tablosu -->
+    <div class="table-card">
+        <div class="table-header">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-list-ul text-primary"></i>
+                <span class="fw-semibold">Ürün Listesi</span>
+            </div>
+            <span class="table-badge" id="toplamKayitYazi">—</span>
+        </div>
+        <div class="table-responsive">
+            <table class="urun-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ürün Adı</th>
+                        <th>Mağaza</th>
+                        <th>Kesim Türü</th>
+                        <th>Kumaş</th>
+                        <th>Açıklama</th>
+                        <th>Durum</th>
+                        <th class="text-center">İşlemler</th>
+                    </tr>
+                </thead>
+           <tbody id="urunTablosu">
+    <tr>
+        <td colspan="8" class="text-center py-4">
+            <div class="spinner-border text-primary"></div>
+        </td>
+    </tr>
+</tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ürün Ekle / Düzenle Modal -->
+<div class="modal fade" id="urunModal" tabindex="-1" aria-labelledby="urunModalBaslik">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="urunModalBaslik">
+                    <i class="fas fa-tshirt me-2 text-primary"></i>Yeni Ürün Ekle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Ürün Adı <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-tag text-muted"></i>
+                            </span>
+                            <input type="text" id="f_ad" class="form-control" placeholder="Örn: Slim Fit Spor Tayt">
+                        </div>
+                        <div class="invalid-feedback" id="err_ad"></div>
+                    </div>
+    <div class="col-md-6">
+    <label class="form-label">Mağaza <span class="text-danger">*</span></label>
+    <div class="input-group">
+        <span class="input-group-text bg-light">
+            <i class="fas fa-store text-muted"></i>
+        </span>
+<select id="f_magazaId" class="form-select">
+    <option value="">Mağaza Seçin</option>
+    @foreach (var m in Model.MagazaListesi)
+    {
+        <!-- m.Value değerinin Guid formatında olduğundan emin olun -->
+        <option value="@m.Value">@m.Text</option>
+    }
+</select>
+    </div>
+    <div class="invalid-feedback" id="err_magazaId"></div>
+</div>
+                    <div class="col-md-6">
+                        <label class="form-label">Kesim Türü</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-cut text-muted"></i>
+                            </span>
+                            <select id="f_kesimTuru" class="form-select">
+                                <option value="">Seçiniz</option>
+                                <option value="Regular">Regular Fit</option>
+                                <option value="Slim">Slim Fit</option>
+                                <option value="Oversize">Oversize</option>
+                                <option value="Athletic">Athletic Fit</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div class="w-100">
+                            <label class="form-label d-block">Kumaş Özellikleri</label>
+                            <div class="kumas-toggle-group">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="f_kumasEsnek">
+                                    <label class="form-check-label" for="f_kumasEsnek">
+                                        <i class="fas fa-expand-arrows-alt me-1 text-primary"></i>
+                                        Esnek Kumaş
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Açıklama</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-align-left text-muted"></i>
+                            </span>
+                            <textarea id="f_aciklama" class="form-control" rows="3"
+                                      placeholder="Ürün hakkında kısa açıklama..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end mt-1">
+                            <span class="text-muted small" id="aciklamaKarakter">0 karakter</span>
+                        </div>
+                    </div>
+                    <div class="col-12" id="kesimBilgiKarti" style="display:none">
+                        <div class="info-card">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="kesimBilgiText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>İptal
+                </button>
+                <button type="button" class="btn btn-primary" id="urunKaydetBtn">
+                    <i class="fas fa-save me-1"></i>Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Onay Modal -->
+<div class="modal fade" id="silOnayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="warning-icon mb-3">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h5 class="mb-2">Ürünü Sil</h5>
+                <p class="text-muted mb-0">
+                    <strong id="silUrunAdi"></strong> ürününü silmek istediğinize emin misiniz?
+                    Bu işlem <strong>geri alınamaz</strong>.
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-danger" id="silOnayBtn">
+                    <i class="fas fa-trash me-1"></i>Evet, Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/Pages/Urunler/Index.js"></script>
+}

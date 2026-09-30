@@ -1,0 +1,520 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Analiz.IndexModel
+
+<div class="fitai-page">
+
+    <!-- Başlık -->
+    <div class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h2 class="page-title mb-0">
+                        <i class="fas fa-chart-line me-2 text-primary"></i>AI & Analiz Merkezi
+                    </h2>
+                    <span class="badge bg-primary-soft text-primary">
+                        <i class="fas fa-robot me-1"></i>AI Destekli
+                    </span>
+                </div>
+                <p class="text-muted mb-0 small">Platformun detaylı grafik ve istatistikleri</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <select id="urunSecici" class="form-select form-select-sm" style="width:220px">
+                    <option value="all">Tüm Ürünler</option>
+                    <option value="1" selected>Premium Spor Ayakkabı</option>
+                    <option value="2">Yoga Matı</option>
+                    <option value="3">Fitness Eldiveni</option>
+                    <option value="4">Su Şişesi</option>
+                </select>
+                <select id="donemFiltre" class="form-select form-select-sm" style="width:auto">
+                    <option value="7">Son 7 Gün</option>
+                    <option value="30" selected>Son 30 Gün</option>
+                    <option value="90">Son 3 Ay</option>
+                    <option value="180">Son 6 Ay</option>
+                </select>
+                <button class="btn btn-sm btn-outline-secondary" id="yenileBtn">
+                    <i class="fas fa-sync-alt me-1"></i>Yenile
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ürün Detay Kartı -->
+    <div class="urun-detay-karti mb-4" id="urunDetayKarti" style="display:none;">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-7">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="urun-gorsel-placeholder bg-primary-soft rounded-3 d-flex align-items-center justify-content-center" style="width:70px;height:70px;">
+                        <i class="fas fa-tshirt fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <h4 class="mb-0" id="urunAdi">Premium Spor Ayakkabı</h4>
+                            <span class="badge bg-success-soft text-success" id="urunStokDurumu">Stokta Var</span>
+                        </div>
+                        <div class="d-flex gap-3 mt-1 flex-wrap">
+                            <span class="text-muted small"><i class="fas fa-tag me-1"></i>Kategori: <span id="urunKategori">Spor</span></span>
+                            <span class="text-muted small"><i class="fas fa-box me-1"></i>Stok: <span id="urunStok">1,240</span> adet</span>
+                        </div>
+                        <div class="mt-2">
+                            <span class="urun-fiyat" id="urunFiyat">₺ 1,299</span>
+                            <span class="text-muted ms-2 small">KDV Dahil</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="ai-skor-karti text-center p-3 rounded-3 bg-primary-soft">
+                    <div class="text-muted small mb-1">AI Performans Skoru</div>
+                    <div class="ai-skor-degeri" id="aiPerformansSkoru">86</div>
+                    <div class="progress mt-2" style="height:4px;">
+                        <div class="progress-bar bg-primary" id="aiSkorProgress" style="width:86%"></div>
+                    </div>
+                    <div class="text-muted small mt-2">
+                        <i class="fas fa-chart-line me-1"></i>Geçen aya göre <span class="text-success">+%4.2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sekme Navigasyonu -->
+    <ul class="nav analiz-nav-tabs mb-4" id="analizTabs">
+        <li class="nav-item">
+            <button class="analiz-nav-btn active" data-tab="gelir">
+                <i class="fas fa-lira-sign me-1"></i>Gelir Analizi
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="analiz-nav-btn" data-tab="nlp">
+                <i class="fas fa-brain me-1"></i>NLP & Duygu
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="analiz-nav-btn" data-tab="magaza">
+                <i class="fas fa-store me-1"></i>Mağaza Karşılaştırma
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="analiz-nav-btn" data-tab="aktivite">
+                <i class="fas fa-th me-1"></i>Aktivite Haritası
+            </button>
+        </li>
+    </ul>
+
+    <!-- ===================== SEKME 1: GELİR ANALİZİ ===================== -->
+    <div id="tab-gelir" class="analiz-tab-icerik">
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-primary">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-primary-soft text-primary">
+                            <i class="fas fa-lira-sign"></i>
+                        </span>
+                        <span class="analiz-kpi-degisim degisim-yukari">
+                            <i class="fas fa-arrow-up"></i> +18%
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger" id="gelir_toplamKomisyon">₺ —</div>
+                    <div class="analiz-kpi-etiket">Toplam Komisyon</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-success">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-success-soft text-success">
+                            <i class="fas fa-chart-line"></i>
+                        </span>
+                        <span class="analiz-kpi-degisim degisim-yukari">
+                            <i class="fas fa-arrow-up"></i> +7%
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger" id="gelir_ortKomisyon">₺ —</div>
+                    <div class="analiz-kpi-etiket">Günlük Ort. Komisyon</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-warning">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-warning-soft text-warning">
+                            <i class="fas fa-crown"></i>
+                        </span>
+                        <span class="analiz-kpi-degisim degisim-yukari">
+                            <i class="fas fa-arrow-up"></i> +3
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger" id="gelir_enIyiMagaza">—</div>
+                    <div class="analiz-kpi-etiket">En Yüksek Komisyon</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-info">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-info-soft text-info">
+                            <i class="fas fa-percentage"></i>
+                        </span>
+                        <span class="analiz-kpi-degisim degisim-asagi">
+                            <i class="fas fa-arrow-down"></i> -1.2%
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger" id="gelir_ortOran">%—</div>
+                    <div class="analiz-kpi-etiket">Ort. Komisyon Oranı</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-xl-8">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-area me-2 text-primary"></i>Komisyon Geliri Zaman Serisi
+                        </h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="gelirZamanChart" title="Tam Ekran">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn btn-xs btn-outline-secondary active" onclick="gelirGrafikiDegistir('line', this)">
+                                <i class="fas fa-chart-line"></i>
+                            </button>
+                            <button class="btn btn-xs btn-outline-secondary" onclick="gelirGrafikiDegistir('bar', this)">
+                                <i class="fas fa-chart-bar"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="gelirZamanChart" height="130"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-pie me-2 text-warning"></i>Pakete Göre Gelir
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="gelirPaketChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <div class="donut-wrapper">
+                            <canvas id="gelirPaketChart" width="200" height="200"></canvas>
+                            <div class="donut-merkez">
+                                <div class="donut-merkez-deger" id="gelirPaketToplam">—</div>
+                                <div class="donut-merkez-etiket">Toplam ₺</div>
+                            </div>
+                        </div>
+                        <div class="kategori-legend mt-3 w-100" id="gelirPaketLegend"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEKME 2: NLP & DUYGU (Geliştirilmiş) ===================== -->
+    <div id="tab-nlp" class="analiz-tab-icerik" style="display:none">
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-primary">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-primary-soft text-primary">
+                            <i class="fas fa-brain"></i>
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger" id="nlp_toplam">—</div>
+                    <div class="analiz-kpi-etiket">Toplam NLP Analiz</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-success">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-success-soft text-success">
+                            <i class="fas fa-smile"></i>
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger text-success" id="nlp_pozitif">—</div>
+                    <div class="analiz-kpi-etiket">Pozitif Yorum</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-danger">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-danger-soft text-danger">
+                            <i class="fas fa-frown"></i>
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger text-danger" id="nlp_negatif">—</div>
+                    <div class="analiz-kpi-etiket">Negatif Yorum</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="analiz-kpi-card border-secondary">
+                    <div class="analiz-kpi-ust">
+                        <span class="analiz-kpi-ikon bg-secondary-soft text-secondary">
+                            <i class="fas fa-meh"></i>
+                        </span>
+                    </div>
+                    <div class="analiz-kpi-deger text-secondary" id="nlp_notr">—</div>
+                    <div class="analiz-kpi-etiket">Nötr Yorum</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-xl-7">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-area me-2 text-primary"></i>Duygu Dağılımı Trendi
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="nlpTrendChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="nlpTrendChart" height="130"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-3 mt-2">
+            <div class="col-xl-5">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-tags me-2 text-info"></i>En Çok Geçen Anahtar Kelimeler
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="kelime-bulutu" id="kelimeBulutu"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-7">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-star me-2 text-warning"></i>Kategoriye Göre Memnuniyet
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="kategoriMemnuniyetChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="kategoriMemnuniyetChart" height="160"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yorum Listesi ve AI Özet Kartı (Yeni) -->
+        <div class="row g-3 mt-3">
+            <div class="col-xl-7">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-comments me-2 text-primary"></i>Kullanıcı Yorumları
+                        </h5>
+                        <div class="duygu-filtre">
+                            <div class="btn-group btn-group-sm" id="duyguFiltreBtnGrubu">
+                                <button class="btn btn-outline-secondary active" data-duygu="all">Tümü</button>
+                                <button class="btn btn-outline-success" data-duygu="pozitif">Pozitif</button>
+                                <button class="btn btn-outline-danger" data-duygu="negatif">Negatif</button>
+                                <button class="btn btn-outline-secondary" data-duygu="notr">Nötr</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="yorum-listesi" id="yorumListesi"></div>
+                        <div class="text-center py-3" id="yorumBos" style="display:none;">
+                            <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                            <p class="text-muted small mb-0">Bu filtreye uygun yorum bulunamadı.</p>
+                        </div>
+                        <div class="text-center pb-3" id="dahaFazlaYorumBtn" style="display:none;">
+                            <button class="btn btn-sm btn-outline-primary">Daha Fazla Yükle <i class="fas fa-chevron-down ms-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="card nlp-ozet-karti h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-robot me-2 text-primary"></i>AI Duygu Analizi Özeti
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="ozet-baslik mb-3">
+                            <i class="fas fa-chart-line me-1"></i> Trendler
+                        </div>
+                        <ul class="ozet-listesi" id="ozetListesi">
+                            <li><i class="fas fa-spinner fa-pulse me-2"></i> Yükleniyor...</li>
+                        </ul>
+                        <div class="ozet-oneri mt-3 p-3 bg-primary-soft rounded-3">
+                            <i class="fas fa-lightbulb text-primary me-2"></i>
+                            <span>AI Önerisi: Veriler analiz ediliyor...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEKME 3: MAĞAZA KARŞILAŞTIRMA ===================== -->
+    <div id="tab-magaza" class="analiz-tab-icerik" style="display:none">
+
+        <div class="row g-3">
+            <div class="col-xl-5">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-spider me-2 text-primary"></i>Mağaza Performans Radar
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="magazaRadarChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <canvas id="magazaRadarChart" width="320" height="320"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-7">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-bar me-2 text-success"></i>Mağaza Karşılaştırması
+                        </h5>
+                        <div class="d-flex gap-2">
+                            <select id="magazaMetrikSecim" class="form-select form-select-sm" style="width:auto">
+                                <option value="komisyon">Komisyon Geliri</option>
+                                <option value="urun">Ürün Sayısı</option>
+                                <option value="yorum">Yorum Sayısı</option>
+                            </select>
+                            <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="magazaKarsilastirmaChart" title="Tam Ekran">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="magazaKarsilastirmaChart" height="160"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-trophy me-2 text-warning"></i>Mağaza Performans Sıralaması
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover analiz-tablo mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sıra</th>
+                                        <th>Mağaza</th>
+                                        <th>Paket</th>
+                                        <th>Komisyon</th>
+                                        <th>Ürün</th>
+                                        <th>Yorum</th>
+                                        <th>Memnuniyet</th>
+                                        <th>Performans</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="magazaSiralamaTablosu"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEKME 4: AKTİVİTE HARİTASI ===================== -->
+    <div id="tab-aktivite" class="analiz-tab-icerik" style="display:none">
+
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-th me-2 text-primary"></i>Haftalık Widget Sorgu Yoğunluğu
+                        </h5>
+                        <div class="d-flex gap-2 align-items-center">
+                            <div class="heatmap-legend d-flex align-items-center gap-2">
+                                <span class="text-muted small">Az</span>
+                                <div class="heatmap-legend-bar"></div>
+                                <span class="text-muted small">Çok</span>
+                            </div>
+                            <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="heatmapKonteyner" title="Tam Ekran">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="heatmap-konteyner" id="heatmapKonteyner"></div>
+                        <div class="heatmap-gun-etiketleri" id="heatmapGunEtiketleri"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-clock me-2 text-info"></i>Saate Göre Yoğunluk
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="saatlikAktiviteChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="saatlikAktiviteChart" height="130"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-calendar-week me-2 text-success"></i>Güne Göre Yoğunluk
+                        </h5>
+                        <button class="btn btn-xs btn-outline-secondary fullscreen-chart-btn" data-target="gunlukAktiviteChart" title="Tam Ekran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="gunlukAktiviteChart" height="130"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aksiyon Butonları -->
+    <div class="fixed-action-buttons">
+        <button class="action-float-btn" id="exportPdfBtn" title="PDF Olarak Dışa Aktar">
+            <i class="fas fa-file-pdf"></i>
+        </button>
+        <button class="action-float-btn" id="exportExcelBtn" title="Excel Olarak Dışa Aktar">
+            <i class="fas fa-file-excel"></i>
+        </button>
+        <button class="action-float-btn" id="shareReportBtn" title="Raporu Paylaş">
+            <i class="fas fa-share-alt"></i>
+        </button>
+    </div>
+
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <abp-script src="/Pages/Analiz/Index.js" />
+}

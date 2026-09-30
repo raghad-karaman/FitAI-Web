@@ -1,0 +1,321 @@
+/* =============================================
+   FitAI - Ürün Detay Sayfası - Modern Tasarım
+   ============================================= */
+
+:root {
+    --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --card-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fitai-page {
+    padding: 1rem 0.5rem;
+}
+
+/* Geri Butonu */
+.back-btn {
+    border-radius: 40px;
+    padding: 0.35rem 1rem;
+    transition: var(--transition-default);
+}
+
+.back-btn:hover {
+    transform: translateX(-3px);
+}
+
+/* Detay Başlık */
+.detail-header {
+    background: #fff;
+    border-radius: 28px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.detail-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.detail-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.detail-magaza {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Info Kartları */
+.info-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.info-card-header {
+    padding: 0.85rem 1.25rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #f1f5f9;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-card-body {
+    padding: 1rem 1.25rem;
+}
+
+/* Bilgi Satırları */
+.info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+}
+
+.info-value {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1e293b;
+    text-align: right;
+}
+
+/* Açıklama */
+.desc-text {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.7;
+}
+
+/* İstatistik Kartları */
+.stat-card {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 0.85rem 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Puan Dağılımı */
+.puan-satir {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.puan-etiket {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #f59e0b;
+    width: 60px;
+    text-align: right;
+}
+
+.puan-bar-wrapper {
+    flex: 1;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.puan-bar {
+    height: 100%;
+    border-radius: 10px;
+    background: #f59e0b;
+    transition: width 0.6s ease;
+}
+
+.puan-adet {
+    font-size: 0.7rem;
+    color: #64748b;
+    width: 30px;
+}
+
+/* Yorumlar */
+.yorum-container {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.yorum-item {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s;
+}
+
+.yorum-item:last-child {
+    border-bottom: none;
+}
+
+.yorum-item:hover {
+    background: rgba(79, 70, 229, 0.02);
+}
+
+.yorum-puan-yildiz {
+    color: #f59e0b;
+    font-size: 0.7rem;
+}
+
+.yorum-metin {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0.5rem 0 0;
+}
+
+.yorum-nlp-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 40px;
+}
+
+.nlp-islendi {
+    background: rgba(14, 165, 233, 0.1);
+    color: #0284c7;
+}
+
+.nlp-bekliyor {
+    background: rgba(245, 158, 11, 0.1);
+    color: #b45309;
+}
+
+/* Badge'ler */
+.kesim-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    display: inline-block;
+}
+
+.kumas-esnek-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    display: inline-block;
+}
+
+.durum-aktif {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    display: inline-block;
+}
+
+.durum-silindi {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 40px;
+    display: inline-block;
+}
+
+/* Silme Modal */
+.warning-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.warning-icon i {
+    font-size: 2rem;
+    color: #ef4444;
+}
+
+/* =============================================
+   Dark Mode
+   ============================================= */
+[data-bs-theme="dark"] .detail-header,
+[data-bs-theme="dark"] .info-card,
+[data-bs-theme="dark"] .stat-card {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .info-card-header {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .detail-title,
+[data-bs-theme="dark"] .info-value {
+    color: #f1f5f9;
+}
+
+[data-bs-theme="dark"] .desc-text,
+[data-bs-theme="dark"] .yorum-metin {
+    color: #cbd5e1;
+}
+
+[data-bs-theme="dark"] .info-row {
+    border-color: #334155;
+}
+
+[data-bs-theme="dark"] .yorum-item {
+    border-color: #334155;
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 768px) {
+    .detail-header { padding: 1rem; }
+    .detail-icon { width: 48px; height: 48px; font-size: 1.2rem; }
+    .detail-title { font-size: 1.2rem; }
+    .info-card-header { flex-wrap: wrap; }
+    .info-card-header .ms-auto { margin-left: 0 !important; margin-top: 0.5rem; }
+}

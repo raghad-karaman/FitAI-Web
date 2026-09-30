@@ -1,0 +1,8 @@
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+@RenderBody()
+
+@await RenderSectionAsync("styles", required: false)
+@await RenderSectionAsync("scripts", required: false)

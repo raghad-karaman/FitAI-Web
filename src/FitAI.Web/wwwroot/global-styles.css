@@ -1,0 +1,207 @@
+/* =============================================
+   FitAI - Global Styles
+   ============================================= */
+
+/* Logo */
+:root .lpx-brand-logo {
+    --lpx-logo: url('/images/logo/leptonx/logo-light.png');
+    --lpx-logo-icon: url('/images/logo/leptonx/logo-light-thumbnail.png');
+}
+
+/* =============================================
+   Tüm Sayfalarda Ortak Yardımcı Sınıflar
+   ============================================= */
+
+/* Soft arka plan renkleri */
+.bg-primary-soft { background: rgba(79,70,229,0.1)  !important; }
+.bg-success-soft { background: rgba(16,185,129,0.1) !important; }
+.bg-warning-soft { background: rgba(245,158,11,0.1) !important; }
+.bg-info-soft    { background: rgba(14,165,233,0.1) !important; }
+.bg-danger-soft  { background: rgba(239,68,68,0.1)  !important; }
+
+/* Font weight */
+.fw-500 { font-weight: 500 !important; }
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+
+/* Card header ortak */
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 1rem 1.25rem;
+}
+
+.card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+/* Sayfa başlığı ortak */
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--lpx-heading-color, #1a1a2e);
+}
+
+.fitai-page {
+    padding: 0.5rem 0;
+}
+
+/* Form label ortak */
+.form-label-sm {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.35rem;
+    display: block;
+}
+
+/* İşlem butonları ortak */
+.btn-islem {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-detay   { background: rgba(79,70,229,0.08);  color: #4f46e5; border-color: rgba(79,70,229,0.2); }
+.btn-detay:hover   { background: #4f46e5; color: #fff; }
+.btn-duzenle { background: rgba(79,70,229,0.08);  color: #4f46e5; border-color: rgba(79,70,229,0.2); }
+.btn-duzenle:hover { background: #4f46e5; color: #fff; }
+.btn-sil     { background: rgba(239,68,68,0.08);  color: #dc2626; border-color: rgba(239,68,68,0.2); }
+.btn-sil:hover     { background: #dc2626; color: #fff; }
+
+/* Durum badge ortak */
+.durum-aktif   { background: rgba(16,185,129,0.1);  color: #059669; font-size:0.72rem; font-weight:600; padding:0.25rem 0.6rem; border-radius:20px; }
+.durum-pasif   { background: rgba(156,163,175,0.1); color: #6b7280; font-size:0.72rem; font-weight:600; padding:0.25rem 0.6rem; border-radius:20px; }
+.durum-silindi { background: rgba(239,68,68,0.1);   color: #dc2626; font-size:0.72rem; font-weight:600; padding:0.25rem 0.6rem; border-radius:20px; }
+
+/* Tablo ortak başlık */
+.fitai-table thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    background: rgba(0,0,0,0.02);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0.85rem 1rem;
+    white-space: nowrap;
+}
+
+.fitai-table tbody td {
+    font-size: 0.875rem;
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    color: #374151;
+}
+
+.fitai-table tbody tr:last-child td { border-bottom: none; }
+.fitai-table tbody tr:hover td { background: rgba(79,70,229,0.02); }
+
+/* =============================================
+   Dark Mode
+   ============================================= */
+[data-bs-theme="dark"] .card-title,
+[data-bs-theme="dark"] .page-title {
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .card-header {
+    border-color: rgba(255,255,255,0.06);
+}
+
+[data-bs-theme="dark"] .fitai-table thead th {
+    background: rgba(255,255,255,0.02);
+    color: #94a3b8;
+}
+
+[data-bs-theme="dark"] .fitai-table tbody td {
+    color: #cbd5e1;
+    border-color: rgba(255,255,255,0.04);
+}
+/* =============================================
+   YENİ: Geçiş Animasyonları & Glow Efektleri
+   ============================================= */
+
+/* Sayfa yükleme animasyonu */
+.fitai-page {
+    animation: pageFadeIn 0.4s ease-out;
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tema geçiş animasyonu */
+:root,
+[data-bs-theme] {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Gradient border yardımcısı */
+.gradient-border {
+    position: relative;
+    border-radius: 12px;
+}
+
+.gradient-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.gradient-border:hover::after {
+    opacity: 1;
+}
+
+/* Glow efekti */
+.glow-hover {
+    transition: box-shadow 0.2s ease;
+}
+
+.glow-hover:hover {
+    box-shadow: 0 8px 25px -8px rgba(79, 70, 229, 0.4);
+}
+
+/* Skeleton loader */
+.skeleton {
+    background: linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.03) 75%);
+    background-size: 200% 100%;
+    animation: skeletonWave 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes skeletonWave {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+[data-bs-theme="dark"] .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+}

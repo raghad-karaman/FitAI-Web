@@ -1,0 +1,263 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.Urunler.ListeModel
+
+<div class="fitai-page">
+
+    <!-- Sayfa Başlığı -->
+    <div class="page-header mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="page-icon">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <div>
+                    <h2 class="page-title mb-1">Ürün Kataloğu</h2>
+                    <p class="text-muted mb-0 small">Tüm ürünleri görüntüleyin ve filtreleyin</p>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-secondary btn-sm active" id="kartGorunumBtn" title="Kart Görünümü">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" id="listeGorunumBtn" title="Liste Görünümü">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+                <a href="/Urunler" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i>Yeni Ürün
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Sol: Filtre Paneli -->
+        <div class="col-xl-3 col-lg-4">
+            <div class="filter-panel">
+                <div class="filter-panel-header">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Filtreleme</span>
+                </div>
+                <div class="filter-panel-body">
+
+                    <!-- Arama -->
+                    <div class="filter-group">
+                        <label class="filter-label">Ürün Ara</label>
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="aramaInput" class="form-control search-input"
+                                   placeholder="Ürün adı...">
+                        </div>
+                    </div>
+
+                    <!-- Mağaza -->
+                    <div class="filter-group">
+                        <label class="filter-label">Mağaza</label>
+                        <select id="magazaFiltre" class="form-select filter-select">
+                            <option value="">Tümü</option>
+                            <option value="1">SportZone TR</option>
+                            <option value="2">FashionHub</option>
+                            <option value="3">ActiveWear</option>
+                            <option value="4">FitStyle</option>
+                            <option value="5">RunnerShop</option>
+                        </select>
+                    </div>
+
+                    <!-- Kesim Türü -->
+                    <div class="filter-group">
+                        <label class="filter-label">Kesim Türü</label>
+                        <div class="checkbox-group" id="kesimCheckboxlar">
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="kesim-check" value="Regular">
+                                <span>Regular Fit</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="kesim-check" value="Slim">
+                                <span>Slim Fit</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="kesim-check" value="Oversize">
+                                <span>Oversize</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="kesim-check" value="Athletic">
+                                <span>Athletic Fit</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Kumaş -->
+                    <div class="filter-group">
+                        <label class="filter-label">Kumaş Tipi</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="kumasRadio" value="" checked>
+                                <span>Tümü</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="kumasRadio" value="esnek">
+                                <span><i class="fas fa-expand-arrows-alt text-success me-1"></i>Esnek</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="kumasRadio" value="standart">
+                                <span>Standart</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- NLP Durumu -->
+                    <div class="filter-group">
+                        <label class="filter-label">NLP Analizi</label>
+                        <select id="nlpFiltre" class="form-select filter-select">
+                            <option value="">Tümü</option>
+                            <option value="islendi">Analiz Edildi</option>
+                            <option value="islenmedi">Analiz Bekliyor</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-outline-secondary w-100 filter-clear-btn" id="filtreTemizle">
+                        <i class="fas fa-times me-1"></i>Tüm Filtreleri Temizle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sağ: Ürün Listesi -->
+        <div class="col-xl-9 col-lg-8">
+
+            <!-- Sıralama & Sonuç Sayısı -->
+            <div class="sort-bar">
+                <span class="result-count" id="sonucYazi">Yükleniyor...</span>
+                <select id="siralamaSelect" class="sort-select">
+                    <option value="id">Varsayılan</option>
+                    <option value="ad">Ada Göre (A-Z)</option>
+                    <option value="puan">Puana Göre</option>
+                    <option value="kesim">Kesim Türüne Göre</option>
+                </select>
+            </div>
+
+            <!-- Kart Görünümü -->
+            <div id="kartGorunum">
+                <div class="row g-3" id="urunKartlari">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Yükleniyor...</span>
+                        </div>
+                        <div class="text-muted mt-2">Ürünler yükleniyor...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste Görünümü -->
+            <div id="listeGorunum" style="display:none">
+                <div class="table-wrapper">
+                    <div class="table-responsive">
+                        <table class="urun-liste-table">
+                            <thead>
+                                <tr>
+                                    <th>Ürün</th>
+                                    <th>Mağaza</th>
+                                    <th>Kesim</th>
+                                    <th>Kumaş</th>
+                                    <th>Ort. Puan</th>
+                                    <th>Yorum</th>
+                                    <th>NLP</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="urunListeTablosu"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Ürün Detay Modal -->
+<div class="modal fade" id="urunDetayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detayModalBaslik">
+                    <i class="fas fa-tshirt me-2 text-primary"></i>Ürün Detayı
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-4">
+
+                    <!-- Sol: Ürün Bilgileri -->
+                    <div class="col-md-5">
+                        <div class="product-detail-card">
+                            <div class="product-detail-icon mb-3" id="detayIkon"></div>
+                            <h4 class="fw-700 mb-1" id="detayAd"></h4>
+                            <div class="text-muted small mb-3" id="detayMagaza"></div>
+                            <div class="d-flex flex-wrap gap-2 mb-3" id="detayBadgeler"></div>
+                            <div class="product-detail-desc" id="detayAciklama"></div>
+                        </div>
+
+                        <!-- Ürün İstatistikleri -->
+                        <div class="row g-2 mt-2">
+                            <div class="col-6">
+                                <div class="detail-stat-card text-center">
+                                    <div class="detail-stat-value text-warning" id="detayOrtPuan">—</div>
+                                    <div class="detail-stat-label">Ort. Puan</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="detail-stat-card text-center">
+                                    <div class="detail-stat-value text-primary" id="detayYorumSayisi">—</div>
+                                    <div class="detail-stat-label">Toplam Yorum</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="detail-stat-card text-center">
+                                    <div class="detail-stat-value text-success" id="detayNlpSayisi">—</div>
+                                    <div class="detail-stat-label">NLP Analiz</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="detail-stat-card text-center">
+                                    <div class="detail-stat-value text-info" id="detayBekleyenNlp">—</div>
+                                    <div class="detail-stat-label">Bekleyen NLP</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sağ: Yorumlar -->
+                    <div class="col-md-7">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="fw-700 mb-0">
+                                <i class="fas fa-comments me-2 text-info"></i>Kullanıcı Yorumları
+                            </h6>
+                            <select id="yorumSirala" class="form-select form-select-sm w-auto">
+                                <option value="yeni">En Yeni</option>
+                                <option value="puan_yuksek">En Yüksek Puan</option>
+                                <option value="puan_dusuk">En Düşük Puan</option>
+                                <option value="nlp">NLP Bekleyenler</option>
+                            </select>
+                        </div>
+                        <div id="yorumListesi" class="yorum-listesi">
+                            <!-- JS ile doldurulacak -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="detayDuzenleBtn" href="#" class="btn btn-warning btn-sm">
+                    <i class="fas fa-pencil-alt me-1"></i>Düzenle
+                </a>
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>

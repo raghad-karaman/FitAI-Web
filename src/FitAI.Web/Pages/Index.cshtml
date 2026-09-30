@@ -1,0 +1,378 @@
+@page
+@using FitAI.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FitAIResource> L
+@model FitAI.Web.Pages.IndexModel
+
+
+<div class="fitai-dashboard">
+
+    <!-- Üst Başlık -->
+    <div class="dashboard-header mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <div class="welcome-badge mb-2">
+                    <i class="fas fa-smile-wink me-1"></i> Hoş geldiniz, Admin
+                </div>
+                <h2 class="dashboard-title mb-1">
+                    FitAI Kontrol Paneli
+                    <span class="sistem-durum-badge ms-2">
+                        <span class="durum-nokta"></span> Sistem Aktif
+                    </span>
+                </h2>
+                <p class="dashboard-subtitle text-muted mb-0">
+                    Platformunuzun genel görünümü ve performans metrikleri
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="dashboard-date">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    <span id="currentDate"></span>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn" id="refreshDashboardBtn" title="Yenile">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="action-btn" id="exportDashboardBtn" title="Rapor İndir">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Kartları -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card" data-card="magaza">
+                <div class="kpi-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="toplamMagaza">—</div>
+                    <div class="kpi-label">Toplam Mağaza</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +2 bu ay
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card" data-card="kullanici">
+                <div class="kpi-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="toplamKullanici">—</div>
+                    <div class="kpi-label">Toplam Kullanıcı</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-user-plus"></i> +12 bu ay
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card" data-card="urun">
+                <div class="kpi-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="toplamUrun">—</div>
+                    <div class="kpi-label">Toplam Ürün</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-plus-circle"></i> +8 bu ay
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="kpi-card" data-card="komisyon">
+                <div class="kpi-icon">
+                    <i class="fas fa-lira-sign"></i>
+                </div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="toplamKomisyon">—</div>
+                    <div class="kpi-label">Bu Ay Komisyon</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-chart-line"></i> +%18 artış
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orta Alan -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-8">
+            <div class="card chart-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-chart-line text-primary"></i>
+                        <h5 class="card-title mb-0">Aylık Komisyon Geliri</h5>
+                    </div>
+                    <span class="text-muted small">Son 6 Ay</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="komisyonChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="stats-stack h-100">
+                <div class="stat-item">
+                    <div class="stat-icon bg-primary-soft">
+                        <i class="fas fa-brain text-primary"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Ort. Vücut Uyum Skoru</div>
+                        <div class="stat-value text-primary" id="ortalamaUyumSkoru">—</div>
+                        <div class="progress mt-2" style="height:6px;">
+                            <div class="progress-bar bg-primary" id="uyumSkoruBar" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon bg-success-soft">
+                        <i class="fas fa-mouse-pointer text-success"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Widget Sorguları (Bu Ay)</div>
+                        <div class="stat-value text-success" id="widgetSorguSayisi">—</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon bg-warning-soft">
+                        <i class="fas fa-shopping-cart text-warning"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Satın Alma Dönüşümü</div>
+                        <div class="stat-value text-warning" id="satinAlmaOrani">—</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon bg-info-soft">
+                        <i class="fas fa-robot text-info"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">AI Attribution Satışlar</div>
+                        <div class="stat-value text-info" id="aiAttributionSayi">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@Html.AntiForgeryToken()
+    <!-- ═══ AI PANEL ═══ -->
+    <div class="row g-4 mb-4">
+        <!-- Vücut Uyum Skoru Analizi -->
+        <div class="col-xl-6">
+            <div class="card ai-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-brain text-primary"></i>
+                        <h5 class="card-title mb-0">Vücut Uyum Skoru Analizi</h5>
+                    </div>
+                    <span class="badge bg-primary-soft text-primary">AI</span>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Vücut Tipi</label>
+                            <select class="form-select form-select-sm" id="aiVucutTipi">
+                                <option>Elma</option>
+                                <option>Armut</option>
+                                <option>Kum Saati</option>
+                                <option>Dikdortgen</option>
+                                <option>Ters Ucgen</option>
+                                <option>Oval</option>
+                                <option>Elmas</option>
+                                <option>Uzun</option>
+                                <option>Atletik</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Ürün Kesimi</label>
+                            <select class="form-select form-select-sm" id="aiUrunKesim">
+                                <option>Slim</option>
+                                <option>Regular</option>
+                                <option>Oversize</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Kumaş Esnekliği</label>
+                            <select class="form-select form-select-sm" id="aiKumasEsnek">
+                                <option value="1">Esnek</option>
+                                <option value="0">Esnek Değil</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Mevcut Beden</label>
+                            <select class="form-select form-select-sm" id="aiMevcutBeden">
+                                <option>XS</option><option>S</option>
+                                <option selected>M</option>
+                                <option>L</option><option>XL</option><option>XXL</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Yorum Özeti <span class="text-muted">(isteğe bağlı)</span></label>
+                            <input type="text" class="form-control form-control-sm" id="aiYorumOzeti" placeholder="ör: dar kesim, ince kumaş">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-sm w-100" id="aiAnalizBtn">
+                                <i class="fas fa-robot me-1"></i> Analiz Yap
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Sonuç -->
+                    <div id="aiAnalizSonuc" class="mt-3" style="display:none;">
+                        <hr class="my-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-semibold text-muted">Uyum Skoru</span>
+                            <span class="fw-bold text-primary fs-5" id="aiUyumSkoru">—</span>
+                        </div>
+                        <div class="progress mb-3" style="height:8px;">
+                            <div class="progress-bar bg-primary" id="aiUyumSkoruBar" style="width:0%;transition:width .6s"></div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="result-chip">
+                                    <span class="small text-muted">İade Riski</span>
+                                    <span class="fw-semibold" id="aiIadeRiski">—</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="result-chip">
+                                    <span class="small text-muted">Önerilen Beden</span>
+                                    <span class="fw-semibold" id="aiOngBeden">—</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info py-2 px-3 mt-3 mb-0 small" id="aiTavsiye"></div>
+                    </div>
+                    <div id="aiAnalizHata" class="alert alert-danger mt-3 mb-0 small" style="display:none;"></div>
+                    <div id="aiAnalizYukleniyor" class="text-center py-3" style="display:none;">
+                        <div class="spinner-border spinner-border-sm text-primary"></div>
+                        <span class="ms-2 text-muted small">AI analiz ediliyor…</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NLP Yorum Analizi -->
+        <div class="col-xl-6">
+            <div class="card ai-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-comments text-success"></i>
+                        <h5 class="card-title mb-0">NLP Yorum Analizi</h5>
+                    </div>
+                    <span class="badge bg-success-soft text-success">AI</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Yorumlar <span class="text-muted">(her satır ayrı yorum)</span></label>
+                        <textarea class="form-control form-control-sm" id="nlpYorumlar" rows="4"
+                            placeholder="Beden dar geldi, iade ettim&#10;Kumaş çok güzel ve kaliteli&#10;Renk farklı çıktı"></textarea>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Ürün ID</label>
+                            <input type="number" class="form-control form-control-sm" id="nlpUrunId" value="1">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Mağaza ID</label>
+                            <input type="number" class="form-control form-control-sm" id="nlpMagazaId" value="1">
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-sm w-100" id="nlpAnalizBtn">
+                        <i class="fas fa-search me-1"></i> Yorumları Analiz Et
+                    </button>
+
+                    <!-- Uyarılar -->
+                    <div id="nlpUyarilar" class="alert alert-warning py-2 px-3 mt-3 mb-0 small" style="display:none;"></div>
+
+                    <!-- Sonuç Listesi -->
+                    <div id="nlpSonucListesi" class="mt-3" style="display:none;">
+                        <hr class="my-2">
+                        <div class="small fw-semibold text-muted mb-2">Analiz Sonuçları</div>
+                        <ul class="nlp-sonuc-ul list-unstyled mb-0" id="nlpSonuclar"></ul>
+                    </div>
+                    <div id="nlpAnalizHata" class="alert alert-danger mt-3 mb-0 small" style="display:none;"></div>
+                    <div id="nlpAnalizYukleniyor" class="text-center py-3" style="display:none;">
+                        <div class="spinner-border spinner-border-sm text-success"></div>
+                        <span class="ms-2 text-muted small">NLP analiz ediliyor…</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ═══ /AI PANEL ═══ -->
+
+    <!-- Alt Alan -->
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="card notification-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-bell text-warning"></i>
+                        <h5 class="card-title mb-0">Son Bildirimler</h5>
+                    </div>
+                    <a href="/Bildirimler" class="btn btn-sm btn-outline-secondary">Tümü</a>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="bildirim-listesi" id="bildirimListesi">
+                        <li class="bildirim-item loading-item">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                            <span class="ms-2 text-muted">Bildirimler yükleniyor...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6">
+            <div class="card store-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-store text-success"></i>
+                        <h5 class="card-title mb-0">Aktif Mağazalar</h5>
+                    </div>
+                    <a href="/Magazalar" class="btn btn-sm btn-outline-secondary">Tümü</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Mağaza Adı</th>
+                                    <th>Paket</th>
+                                    <th>Komisyon</th>
+                                    <th>Durum</th>
+                                </tr>
+                            </thead>
+                            <tbody id="magazaTablosu">
+                                <tr class="loading-row">
+                                    <td colspan="4">
+                                        <div class="d-flex justify-content-center py-4">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                            <span class="ms-2 text-muted">Yükleniyor...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <!-- jQuery (eğer layout'ta yoksa) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Sizin Index.js -->
+    <script src="/Pages/Index.js"></script>
+}

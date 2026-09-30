@@ -1,0 +1,48 @@
+/* ── Komisyonlar Sayfası ───────────────────────────────── */
+
+#KomisyonTable {
+    width: 100% !important;
+}
+
+#KomisyonTable thead th {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+#KomisyonTable td {
+    vertical-align: middle;
+}
+
+/* AI Attribution badge hizalama */
+#KomisyonTable .badge {
+    font-size: 0.8rem;
+    padding: 0.35em 0.65em;
+}
+
+/* Filtre satırı */
+#DonemYilFilter,
+#DonemAyFilter {
+    min-width: 120px;
+}
+
+/* Tutar sütunları sağa hizalı */
+#KomisyonTable td:nth-child(5),
+#KomisyonTable td:nth-child(6),
+#KomisyonTable td:nth-child(7) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
